@@ -24,6 +24,14 @@ namespace ChatApp
                 options.UseSqlServer(connection);
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsePolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
+                });
+            });
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -34,6 +42,8 @@ namespace ChatApp
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors("CorsePolicy");
 
             app.UseAuthorization();
 

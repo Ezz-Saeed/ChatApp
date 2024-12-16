@@ -21,7 +21,7 @@ namespace ChatApp.Controllers
         [HttpGet("{id}")]
         public async Task<AppUser> GetUser(int id)
         {
-            return await context.Users.FindAsync(id)!;
+            return await context.Users.FindAsync(id);
         }
     }
 }
