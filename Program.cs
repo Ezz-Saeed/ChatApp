@@ -1,5 +1,7 @@
 
 using ChatApp.Data;
+using ChatApp.Interfaces;
+using ChatApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp
@@ -31,6 +33,8 @@ namespace ChatApp
                     policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
                 });
             });
+
+            builder.Services.AddScoped<ITokenService, TokenService>();
 
             var app = builder.Build();
 
