@@ -1,6 +1,8 @@
 ﻿using ChatApp.Data;
 using ChatApp.DTOs;
+using ChatApp.Interfaces;
 using ChatApp.Models;
+using ChatApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,10 @@ using System.Text;
 
 namespace ChatApp.Controllers
 {
-    public class AccountsController(AppDbContext context) : BasApiController
+    public class AccountsController(AppDbContext context, ITokenService tokenService) : BasApiController
     {
         [HttpPost("register")]
-        public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             if (await CheckUserExists(registerDto.UserName)) return BadRequest("Username is already taken");
 
@@ -25,11 +27,15 @@ namespace ChatApp.Controllers
             };
             context.Users.Add(user);
             await context.SaveChangesAsync();
-            return user;
+            return new UserDto
+            {
+                UserName = user.UserName,
+                Token = tokenService.CreateToken(user)
+            };
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await context.Users.SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
 
@@ -43,7 +49,11 @@ namespace ChatApp.Controllers
                     return Unauthorized("Unauthorized user!");
             }
 
-            return user;
+            return new UserDto
+            {
+                UserName = user.UserName,
+                Token = tokenService.CreateToken(user)
+            };
         }
 
         private async Task<bool> CheckUserExists(string userName)

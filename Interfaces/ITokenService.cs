@@ -4,6 +4,6 @@ namespace ChatApp.Interfaces
 {
     public interface ITokenService
     {
-        string GetToken(AppUser appUser);
+        string CreateToken(AppUser appUser);
     }
 }

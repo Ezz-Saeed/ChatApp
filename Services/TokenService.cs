@@ -11,7 +11,7 @@ namespace ChatApp.Services
     {
         private readonly SymmetricSecurityKey symmetricSecurityKey = 
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["securityKey"]!));
-        public string GetToken(AppUser appUser)
+        public string CreateToken(AppUser appUser)
         {
             var claims = new List<Claim>
             {
