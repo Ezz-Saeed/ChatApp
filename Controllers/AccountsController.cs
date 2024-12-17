@@ -11,7 +11,7 @@ namespace ChatApp.Controllers
 {
     public class AccountsController(AppDbContext context) : BasApiController
     {
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult<AppUser>> Register(RegisterDto registerDto)
         {
             if (await CheckUserExists(registerDto.UserName)) return BadRequest("Username is already taken");
@@ -25,6 +25,24 @@ namespace ChatApp.Controllers
             };
             context.Users.Add(user);
             await context.SaveChangesAsync();
+            return user;
+        }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<AppUser>> Login(LoginDto loginDto)
+        {
+            var user = await context.Users.SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
+
+            if (user is null) return Unauthorized("Unauthorized user!");
+            using var hmac = new HMACSHA512(user.PasswordSalt);
+            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
+
+            for(int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != user.PasswordHash[i])
+                    return Unauthorized("Unauthorized user!");
+            }
+
             return user;
         }
 
