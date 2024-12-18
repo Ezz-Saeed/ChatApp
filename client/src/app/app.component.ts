@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { NavComponent } from "./Components/nav/nav.component";
 
 @Component({
   selector: 'app-root',
-  imports: [ CommonModule],
+  imports: [CommonModule, NavComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
     return this.http.get("http://localhost:5203/api/users").subscribe({
       next:res=>{
         this.users = res;
-        console.log(this.users)
+        // console.log(this.users)
       },
       error:err=>console.log(err)
     });
