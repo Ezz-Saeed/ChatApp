@@ -16,14 +16,18 @@
           </li>
         </ul>
 
-        <div *ngIf="isLoggesin" class="dropdown">
-          <a class="dropdown-toggle text-light">Welcome </a>
-            <div class="dropdown-menue">
-              <a href="" class="dropdown-item">Edit profile</a>
-              <a href="" class="dropdown-item" (click)="logout()">Logout</a>
-            </div>
 
+        <div *ngIf="isLoggesin" class="btn-group" dropdown>
+          <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle
+          text-light text-decoration-none">Welcome</a>
+          <ul  *dropdownMenu class="dropdown-menu mt-3">
+            <li ><a href="" class="dropdown-item">Edit profile</a></li>
+            <li class="dropdown-divider"></li>
+            <li ><a class="dropdown-item" href="#"></a></li>
+            <li> <a href="" class="dropdown-item " (click)="logout()">Logout</a></li>
+          </ul>
         </div>
+
         <form *ngIf="!isLoggesin" #loginForm="ngForm" class="d-flex col-sm-4 col-md-4" (ngSubmit)="login()"
         autocomplete="off">
           <input name="username" [(ngModel)]="model.username"
