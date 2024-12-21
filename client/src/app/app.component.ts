@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavComponent } from "./Components/nav/nav.component";
+import { IUser } from './Models/user';
+import { AccountService } from './Services/account.service';
 
 @Component({
   selector: 'app-root',
@@ -14,9 +16,15 @@ export class AppComponent implements OnInit {
   title = 'Chat App';
   users!:any;
 
-  constructor(private http:HttpClient){}
+  constructor(private http:HttpClient, private accountService:AccountService){}
   ngOnInit(): void {
     this.getUsers();
+    this.setCurrentUser();
+  }
+
+  setCurrentUser(){
+    const user:IUser = JSON.parse(localStorage.getItem('user')??'')??null
+    this.accountService.setCurrentUser(user);
   }
 
   getUsers(){

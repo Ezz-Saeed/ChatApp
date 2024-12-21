@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormsModule} from '@angular/forms'
 import { AccountService } from '../../Services/account.service';
 import { CommonModule } from '@angular/common';
@@ -10,17 +10,19 @@ import {BsDropdownModule} from 'ngx-bootstrap/dropdown'
   templateUrl: './nav.component.html',
   styleUrl: './nav.component.css'
 })
-export class NavComponent {
+export class NavComponent implements OnInit {
   model:any = {};
-  isLoggesin = false;
 
-  constructor(private accountService:AccountService){}
+  constructor(public accountService:AccountService){}
+
+  ngOnInit(): void {
+
+  }
 
   login(){
     this.accountService.login(this.model).subscribe({
       next:res=>{
         console.log(res)
-        this.isLoggesin = true;
       },
       error:err=>{
         console.log(err)
@@ -29,7 +31,9 @@ export class NavComponent {
   }
 
   logout(){
-    this.isLoggesin = false;
+    this.accountService.logout();
   }
+
+
 }
 
