@@ -17,9 +17,8 @@ export class AppComponent implements OnInit {
   title = 'Chat App';
   users!:any;
 
-  constructor(private http:HttpClient, private accountService:AccountService){}
+  constructor( private accountService:AccountService){}
   ngOnInit(): void {
-    this.getUsers();
     this.setCurrentUser();
   }
 
@@ -28,14 +27,6 @@ export class AppComponent implements OnInit {
     this.accountService.setCurrentUser(user);
   }
 
-  getUsers(){
-    return this.http.get("http://localhost:5203/api/users").subscribe({
-      next:res=>{
-        this.users = res;
-        // console.log(this.users)
-      },
-      error:err=>console.log(err)
-    });
-  }
+
 
 }

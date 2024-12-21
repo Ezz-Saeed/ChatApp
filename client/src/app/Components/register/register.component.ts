@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -9,12 +9,15 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegisterComponent {
   model: any= {};
+  @Input() usersFromHome:any;
+  @Output() cancelRegister = new EventEmitter();
 
   register(){
     console.log(this.model)
   }
 
   cancel(){
+    this.cancelRegister.emit(false);
     console.log('Cancelled')
   }
 
