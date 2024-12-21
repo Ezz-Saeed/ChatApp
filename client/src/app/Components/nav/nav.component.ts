@@ -3,7 +3,8 @@ import {FormsModule} from '@angular/forms'
 import { AccountService } from '../../Services/account.service';
 import { CommonModule } from '@angular/common';
 import {BsDropdownModule} from 'ngx-bootstrap/dropdown'
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-nav',
@@ -14,7 +15,9 @@ import { RouterModule } from '@angular/router';
 export class NavComponent implements OnInit {
   model:any = {};
 
-  constructor(public accountService:AccountService){}
+  constructor(public accountService:AccountService, private router:Router,
+    private toastr:ToastrService
+  ){}
 
   ngOnInit(): void {
 
@@ -23,16 +26,18 @@ export class NavComponent implements OnInit {
   login(){
     this.accountService.login(this.model).subscribe({
       next:res=>{
-        console.log(res)
+        this.router.navigateByUrl('/members')
       },
       error:err=>{
         console.log(err)
+        this.toastr.error(err.error)
       }
     })
   }
 
   logout(){
     this.accountService.logout();
+    this.router.navigateByUrl('/')
   }
 
 
