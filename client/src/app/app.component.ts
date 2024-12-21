@@ -5,10 +5,11 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { NavComponent } from "./Components/nav/nav.component";
 import { IUser } from './Models/user';
 import { AccountService } from './Services/account.service';
+import { ToastrModule } from 'ngx-toastr';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, NavComponent, RouterModule],
+  imports: [CommonModule, NavComponent, RouterModule, ToastrModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
