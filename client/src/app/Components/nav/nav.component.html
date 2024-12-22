@@ -14,9 +14,9 @@
         </ul>
 
 
-        <div *ngIf="accountService.currentUser$ | async" class="btn-group" dropdown>
+        <div *ngIf="(accountService.currentUser$ | async) as user" class="btn-group text-dark" dropdown>
           <a id="button-basic" dropdownToggle type="button" class="dropdown-toggle
-          text-light text-decoration-none">Welcome</a>
+          text-light text-decoration-none">Welcome {{user.userName | titlecase}}</a>
           <ul  *dropdownMenu class="dropdown-menu mt-3">
             <li ><a href="" class="dropdown-item">Edit profile</a></li>
             <li class="dropdown-divider"></li>
@@ -31,7 +31,7 @@
           class="form-control me-2" type="search" placeholder="Username">
           <input name="password" [(ngModel)]="model.password"
           class="form-control me-2" type="password" placeholder="Password">
-          <button class="btn btn-outline-success" type="submit">Login</button>
+          <button class="btn btn-success" type="submit">Login</button>
         </form>
       </div>
 </nav>
