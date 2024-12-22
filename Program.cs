@@ -2,6 +2,7 @@
 using ChatApp.Data;
 using ChatApp.Extensions;
 using ChatApp.Interfaces;
+using ChatApp.Middlwares;
 using ChatApp.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +37,7 @@ namespace ChatApp
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<ExceptionMiddleware>();
             app.UseHttpsRedirection();
 
             app.UseCors("CorsePolicy");
