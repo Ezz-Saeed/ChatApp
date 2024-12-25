@@ -1,4 +1,5 @@
 ﻿using ChatApp.Data;
+using ChatApp.Interfaces;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -7,23 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Controllers
 {
-
-    public class UsersController(AppDbContext context) : BasApiController
+    [Authorize]
+    public class UsersController(IUserRepository repository) : BasApiController
     {
 
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IEnumerable<AppUser>> GetUsers()
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
-            return await context.Users.ToListAsync();
+            var users = await repository.GetAllAsync();
+            return Ok(users);
         }
 
-        [HttpGet("{id}")]
-        [Authorize]
-        public async Task<AppUser> GetUser(int id)
+        [HttpGet("{name}")]        
+        public async Task<AppUser> GetUser(string name)
         {
-            return await context.Users.FindAsync(id);
+            return await repository.GetByUserNameAsync(name);
         }
     }
 }

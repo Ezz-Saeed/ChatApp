@@ -8,7 +8,7 @@ namespace ChatApp.Data
     {
         public async Task<IEnumerable<AppUser>> GetAllAsync()
         {
-            return await context.Users.ToListAsync();
+            return await context.Users.Include(u=>u.Photos).ToListAsync();
         }
 
         public async Task<AppUser> GetByIdAsync(int id)
@@ -18,7 +18,7 @@ namespace ChatApp.Data
 
         public async Task<AppUser> GetByUserNameAsync(string userName)
         {
-            return await context.Users.SingleOrDefaultAsync(u => u.UserName == userName);
+            return await context.Users.Include(u => u.Photos).SingleOrDefaultAsync(u => u.UserName == userName);
         }
 
         public async Task<bool> SaveAllAsync()
