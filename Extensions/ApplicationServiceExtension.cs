@@ -1,4 +1,5 @@
 ﻿using ChatApp.Data;
+using ChatApp.Helpers;
 using ChatApp.Interfaces;
 using ChatApp.Services;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ namespace ChatApp.Extensions
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
+
+            services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
             return services;
         }

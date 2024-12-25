@@ -1,4 +1,5 @@
-﻿using ChatApp.Models;
+﻿using ChatApp.DTOs;
+using ChatApp.Models;
 
 namespace ChatApp.Interfaces
 {
@@ -9,5 +10,7 @@ namespace ChatApp.Interfaces
         Task<IEnumerable<AppUser>> GetAllAsync();
         Task<AppUser> GetByIdAsync(int id);
         Task<AppUser> GetByUserNameAsync(string userName);
+        Task<MemberDto> GetMemberAsync(string userName);
+        Task<IEnumerable<MemberDto>> GetMembersAsync();
     }
 }
