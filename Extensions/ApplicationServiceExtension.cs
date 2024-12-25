@@ -25,7 +25,7 @@ namespace ChatApp.Extensions
                 });
             });
 
-
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
 
             return services;
