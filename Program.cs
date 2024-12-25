@@ -1,5 +1,6 @@
 
 using ChatApp.Data;
+using ChatApp.Data.Seed;
 using ChatApp.Extensions;
 using ChatApp.Interfaces;
 using ChatApp.Middlwares;
@@ -13,7 +14,7 @@ namespace ChatApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,21 @@ namespace ChatApp
 
 
             app.MapControllers();
+
+            using var scope = app.Services.CreateScope();
+            var services  = scope.ServiceProvider;
+            try
+            {
+                var context = services.GetRequiredService<AppDbContext>();
+                await context.Database.MigrateAsync();
+                await AppUserSeed.SeedUsersAsync(context);
+            }
+            catch (Exception ex)
+            {
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                logger.LogError(ex, ex.Message);
+                //throw new Exception(ex.Message, ex);
+            }
 
             app.Run();
         }
