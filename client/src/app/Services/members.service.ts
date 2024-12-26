@@ -13,7 +13,7 @@ const options = {
   providedIn: 'root'
 })
 
-export class UsersService {
+export class MembersService {
  baseUrl = Environment.apiUrl;
 
    constructor(private http:HttpClient){}
