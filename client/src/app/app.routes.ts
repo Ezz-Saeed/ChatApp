@@ -15,10 +15,10 @@ export const routes: Routes = [
     runGuardsAndResolvers:'always',
     canActivate:[authGuard],
     children:[
-      {path:'members',component:MemberListComponent},
       {path:'members/:id',component:MemberDetailsComponent},
       {path:'lists',component:ListsComponent},
       {path:'messages',component:MessagesComponent},
+      {path:'members',component:MemberListComponent},
     ]
   },
   {path:'error',component:TestErrorsComponent},
