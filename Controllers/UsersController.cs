@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace ChatApp.Controllers
 {
@@ -27,6 +28,19 @@ namespace ChatApp.Controllers
         {
             var user = await repository.GetMemberAsync(name);
             return user;
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateMember(UpdateMemberDto updateMemberDto)
+        {
+            var userName = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = await repository.GetByUserNameAsync(userName);
+            if(user is null) return Unauthorized("Unauthorized user!");
+
+            mapper.Map(updateMemberDto, user);
+            repository.UpdateUser(user);
+            if(await repository.SaveAllAsync()) return NoContent();
+            return BadRequest("Couldn't update profile");
         }
     }
 }
