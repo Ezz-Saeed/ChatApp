@@ -6,10 +6,13 @@ import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/
 import { provideToastr } from 'ngx-toastr';
 import { errorInterceptor } from './Interceptors/error.interceptor';
 import { authenticationInterceptor } from './Interceptors/authentication.interceptor';
+import { loadingInterceptor } from './Interceptors/loading.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
-    provideHttpClient(withFetch(),withInterceptors([errorInterceptor,authenticationInterceptor])),provideAnimations(),provideToastr({
+    provideHttpClient(withFetch(),withInterceptors([errorInterceptor,authenticationInterceptor,
+      loadingInterceptor,
+    ])),provideAnimations(),provideToastr({
       positionClass:'toast-bottom-right'
     }),
   ]

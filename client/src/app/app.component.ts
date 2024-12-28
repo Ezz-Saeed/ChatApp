@@ -6,10 +6,11 @@ import { NavComponent } from "./Components/nav/nav.component";
 import { IUser } from './Models/user';
 import { AccountService } from './Services/account.service';
 import { ToastrModule } from 'ngx-toastr';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @Component({
   selector: 'app-root',
-  imports: [CommonModule, NavComponent, RouterModule, ToastrModule],
+  imports: [CommonModule, NavComponent, RouterModule, ToastrModule, NgxSpinnerModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
