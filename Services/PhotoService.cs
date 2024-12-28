@@ -8,8 +8,8 @@ namespace ChatApp.Services
 {
     public class PhotoService : IPhotoService
     {
-        private readonly Cloudinary cloudinary = new Cloudinary();
-        public PhotoService(Cloudinary cloudinary, IOptions<CloudinarySettings> config)
+        private readonly Cloudinary cloudinary;
+        public PhotoService(IOptions<CloudinarySettings> config)
         {
             Account account = new Account(config.Value.CloudName, config.Value.ApiKey, config.Value.ApiSecret);
             cloudinary = new Cloudinary(account);
