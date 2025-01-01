@@ -69,5 +69,41 @@ namespace ChatApp.Controllers
                 
             return BadRequest("Couldn't upload photo!");
         }
+
+        [HttpPut("setMainPhoto/{photoId}")]
+        public async Task<ActionResult> SetMainPhoto(int photoId)
+        {
+            var user = await repository.GetByUserNameAsync(User.GetUserName());
+            var photo = user.Photos.FirstOrDefault(p => p.Id == photoId);
+
+            if (photo.IsMain) return BadRequest("This is already your main photo!");
+
+            var currentMain = user.Photos.FirstOrDefault(p => p.IsMain);
+            if (currentMain is not null) currentMain.IsMain = false;
+            photo.IsMain = true;
+
+            if(await repository.SaveAllAsync()) return NoContent();
+            return BadRequest("Couldn't update profile!");
+        }
+
+        [HttpDelete("deletePhoto/{id}")]
+        public async Task<ActionResult> DeletePhoto(int id)
+        {
+            var user = await repository.GetByUserNameAsync(User.GetUserName());
+            var photo = user.Photos.FirstOrDefault(p=>p.Id == id);
+            if(photo is null) return NotFound();
+
+            if (photo.IsMain) return BadRequest("Main photo can not be deleted!");
+
+            if(photo.PublicId is not null)
+            {
+                var result = await photoService.DeleteImageAsync(photo.PublicId);
+                if(result.Error is not null) return BadRequest(result.Error.Message);
+            }
+
+            user.Photos.Remove(photo);
+            if(await repository.SaveAllAsync() ) return Ok();
+            return BadRequest("Could't delete photo!");
+        }
     }
 }

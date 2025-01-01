@@ -37,7 +37,7 @@ namespace ChatApp.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await context.Users.SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
+            var user = await context.Users.Include(u=>u.Photos).SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
 
             if (user is null) return Unauthorized("Unauthorized user!");
             using var hmac = new HMACSHA512(user.PasswordSalt);
@@ -52,7 +52,8 @@ namespace ChatApp.Controllers
             return new UserDto
             {
                 UserName = user.UserName,
-                Token = tokenService.CreateToken(user)
+                Token = tokenService.CreateToken(user),
+                PhotoUrl = user.Photos.FirstOrDefault(p=>p.IsMain)?.Url
             };
         }
 
