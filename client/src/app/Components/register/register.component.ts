@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../../Services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
@@ -23,10 +23,24 @@ export class RegisterComponent implements OnInit {
 
   initializeForm(){
     this.registerForm = new FormGroup({
-      userName: new FormControl(),
-      password: new FormControl(),
-      confirmPassword: new FormControl(),
+      userName: new FormControl('',Validators.required),
+      password: new FormControl('',[Validators.required,
+        Validators.minLength(4),Validators.maxLength(8)]),
+      confirmPassword: new FormControl('',[Validators.required, this.matchValue('password')]),
     })
+
+    this.registerForm?.get('password')?.valueChanges.subscribe({
+      next:()=>{
+        this.registerForm.get('confirmPassword')?.updateValueAndValidity()
+      }
+    })
+  }
+
+  matchValue(matchTo:string): ValidatorFn{
+    return (control:AbstractControl)=>{
+      return control.value === control?.parent?.get(matchTo)?.value
+      ? null : {isNotMatch:true}
+    }
   }
 
   register(){
