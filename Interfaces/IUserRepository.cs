@@ -1,4 +1,5 @@
 ﻿using ChatApp.DTOs;
+using ChatApp.Helpers;
 using ChatApp.Models;
 
 namespace ChatApp.Interfaces
@@ -11,6 +12,6 @@ namespace ChatApp.Interfaces
         Task<AppUser> GetByIdAsync(int id);
         Task<AppUser> GetByUserNameAsync(string userName);
         Task<MemberDto> GetMemberAsync(string userName);
-        Task<IEnumerable<MemberDto>> GetMembersAsync();
+        Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams);
     }
 }

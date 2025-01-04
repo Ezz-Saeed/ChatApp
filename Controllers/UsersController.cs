@@ -2,6 +2,7 @@
 using ChatApp.Data;
 using ChatApp.DTOs;
 using ChatApp.Extensions;
+using ChatApp.Helpers;
 using ChatApp.Interfaces;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -18,9 +19,10 @@ namespace ChatApp.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
-            var users = await repository.GetMembersAsync();
+            var users = await repository.GetMembersAsync(userParams);
+            Response.AddPaginationHeader(users.CurrentPage, users.PageSize, users.TotalCount, users.TotalPages);
             return Ok(users);
         }
 

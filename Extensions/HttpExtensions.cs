@@ -9,7 +9,13 @@ namespace ChatApp.Extensions
             int otalItems, int totalPages)
         {
             var paginationHeader = new PaginationHeader(currentPage, itemsPerPage, otalItems, totalPages);
-            response.Headers.Add("pagination", JsonSerializer.Serialize(paginationHeader));
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            };
+
+            response.Headers.Add("pagination", JsonSerializer.Serialize(paginationHeader),options);
             response.Headers.Add("Access-control-Expose-Headers", "Pagination");
         }
     }
