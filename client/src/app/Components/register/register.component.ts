@@ -3,10 +3,11 @@ import { AbstractControl, FormControl, FormGroup, FormsModule, ReactiveFormsModu
 import { AccountService } from '../../Services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
+import { TextInputComponent } from "../text-input/text-input.component";
 
 @Component({
   selector: 'app-register',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, TextInputComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
