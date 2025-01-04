@@ -26,8 +26,14 @@
 
   <app-text-input [label]="'Confirm Password'" [type]='"password"' formControlName="confirmPassword"></app-text-input>
 
+  <div class="row" *ngIf="validationErrors.length > 0">
+    <ul class="text-danger">
+      <li *ngFor="let error of validationErrors">{{error}}</li>
+    </ul>
+  </div>
+
   <div class="form-group text-center mt-3">
-    <button class="btn btn-success mx-2" type="submit">Register</button>
+    <button [disabled]="registerForm.invalid" class="btn btn-success mx-2" type="submit">Register</button>
     <button class="btn btn-danger mx-2" (click)="cancel()" type="button">Cancel</button>
   </div>
 </form>

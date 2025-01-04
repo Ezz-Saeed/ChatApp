@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { TextInputComponent } from "../text-input/text-input.component";
 import { DateInputComponent } from '../date-input/date-input.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -13,13 +14,13 @@ import { DateInputComponent } from '../date-input/date-input.component';
   styleUrl: './register.component.css'
 })
 export class RegisterComponent implements OnInit {
-  model: any= {};
   @Output() cancelRegister = new EventEmitter();
   registerForm!:FormGroup;
   maxDate!:Date;
+  validationErrors:string[] = [];
 
   constructor(private accountService:AccountService,private toastr:ToastrService,
-    private fb:FormBuilder){}
+    private fb:FormBuilder, private router:Router){}
 
   ngOnInit(): void {
     this.initializeForm();
@@ -55,16 +56,15 @@ export class RegisterComponent implements OnInit {
   }
 
   register(){
-    // this.accountService.register(this.model).subscribe({
-    //   next:res=>{
-    //     console.log(res);
-    //     this.cancel();
-    //   },
-    //   error:err=>{
-    //     console.log(err)
-    //   }
+    this.accountService.register(this.registerForm.value).subscribe({
+      next:res=>{
+        this.router.navigateByUrl('/members')
+      },
+      error:err=>{
+        this.validationErrors = err;
+      }
 
-    // })
+    })
   }
 
   cancel(){
