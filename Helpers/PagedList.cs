@@ -7,7 +7,7 @@ namespace ChatApp.Helpers
         public PagedList(IEnumerable<T> items, int totalCount, int pageNumber, int pageSize)
         {
             CurrentPage = pageNumber;
-            TotalPages = (int) (totalCount/(double)pageSize);
+            TotalPages = (int) Math.Ceiling((totalCount / (double)pageSize));
             TotalCount = totalCount;
             PageSize = pageSize;
             AddRange(items);

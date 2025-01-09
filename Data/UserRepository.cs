@@ -19,7 +19,7 @@ namespace ChatApp.Data
 
         public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
         {
-           var query = context.Users.ProjectTo<MemberDto>(mapper.ConfigurationProvider);
+           var query = context.Users.ProjectTo<MemberDto>(mapper.ConfigurationProvider).AsNoTracking();
 
             return await PagedList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         }

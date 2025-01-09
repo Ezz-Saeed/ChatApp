@@ -15,7 +15,7 @@ namespace ChatApp.Extensions
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             };
 
-            response.Headers.Add("pagination", JsonSerializer.Serialize(paginationHeader),options);
+            response.Headers.Add("pagination", JsonSerializer.Serialize(paginationHeader, options));
             response.Headers.Add("Access-control-Expose-Headers", "Pagination");
         }
     }
