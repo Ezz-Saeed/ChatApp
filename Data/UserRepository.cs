@@ -19,9 +19,12 @@ namespace ChatApp.Data
 
         public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
         {
-           var query = context.Users.ProjectTo<MemberDto>(mapper.ConfigurationProvider).AsNoTracking();
+            var query = context.Users.AsQueryable();
+            query = query.Where(u=>u.UserName != userParams.CurrentUserName);
+            query = query.Where(u=>u.Gender == userParams.Gender);
 
-            return await PagedList<MemberDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+            return await PagedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(mapper.ConfigurationProvider).AsNoTracking(), 
+                userParams.PageNumber, userParams.PageSize);
         }
         public async Task<IEnumerable<AppUser>> GetAllAsync()
         {
