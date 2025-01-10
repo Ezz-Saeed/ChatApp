@@ -6,6 +6,10 @@ import { CommonModule } from '@angular/common';
 import { IPagination } from '../../Models/pagination';
 import {PaginationModule} from 'ngx-bootstrap/pagination'
 import { FormsModule } from '@angular/forms';
+import { UserParams } from '../../Models/userParams';
+import { IUser } from '../../Models/user';
+import { AccountService } from '../../Services/account.service';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-member-list',
@@ -16,16 +20,25 @@ import { FormsModule } from '@angular/forms';
 export class MemberListComponent implements OnInit {
   members?:IMember[]
   pagination?:IPagination;
-  pageNumber = 2;
-  pageSize = 5;
-  constructor(private membersService:MembersService){}
+  userParams!:UserParams;
+  user!:IUser
+
+  constructor(private membersService:MembersService, accountService:AccountService){
+    accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user=>{
+        this.userParams = new UserParams(user!)
+      },
+      error: err=>console.log(err)
+
+    })
+  }
 
   ngOnInit(): void {
    this.loadMembers();
   }
 
   loadMembers(){
-    this.membersService.getMembers(this.pageNumber, this.pageSize).subscribe({
+    this.membersService.getMembers(this.userParams).subscribe({
       next: res=>{
         this.members = res.result;
         this.pagination = res.pagination;
@@ -35,7 +48,7 @@ export class MemberListComponent implements OnInit {
   }
 
   pageChanged(event:any){
-    this.pageNumber = event.page;
+    this.userParams.pageNumber = event.page;
     this.loadMembers();
   }
 
