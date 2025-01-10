@@ -32,6 +32,7 @@ namespace ChatApp.Controllers
                 UserName = user.UserName,
                 Token = tokenService.CreateToken(user),
                 KnownAs = user.KnownAs,
+                Gender = user.Gender,
             };
         }
 
@@ -56,6 +57,7 @@ namespace ChatApp.Controllers
                 Token = tokenService.CreateToken(user),
                 PhotoUrl = user.Photos.FirstOrDefault(p=>p.IsMain)?.Url,
                 KnownAs = user.KnownAs,
+                Gender=user.Gender,
             };
         }
 
