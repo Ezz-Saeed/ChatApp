@@ -21,12 +21,14 @@ export class MemberListComponent implements OnInit {
   members?:IMember[]
   pagination?:IPagination;
   userParams!:UserParams;
-  user!:IUser
+  user!:IUser;
+  genederList = [{value:'male', display:'Males'}, {value:'female', display:'Females'}]
 
   constructor(private membersService:MembersService, accountService:AccountService){
     accountService.currentUser$.pipe(take(1)).subscribe({
       next: user=>{
         this.userParams = new UserParams(user!)
+        this.user = user!
       },
       error: err=>console.log(err)
 
@@ -45,6 +47,12 @@ export class MemberListComponent implements OnInit {
 
       }
     })
+  }
+
+  resetFilters(){
+    this.userParams = new UserParams(this.user);
+    this.loadMembers();
+    console.log(this.user)
   }
 
   pageChanged(event:any){

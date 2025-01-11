@@ -41,7 +41,7 @@ export class PhotoEditorComponent implements OnInit {
   setMainPhoto(photo:IPhoto){
     this.membersService.setMainPhoto(photo.id).subscribe({
       next:()=>{
-        this.user!.photpUrl = photo.url;
+        this.user!.photoUrl = photo.url;
         this.accountService.setCurrentUser(this.user!);
         this.member.photoUrl = photo.url;
         this.member.photos.forEach(p=>{
@@ -79,7 +79,7 @@ export class PhotoEditorComponent implements OnInit {
         const photo:IPhoto = JSON.parse(response);
         this.member.photos.push(photo);
         if(photo.isMain){
-          this.user!.photpUrl = photo.url;
+          this.user!.photoUrl = photo.url;
           this.member.photoUrl = photo.url;
           this.accountService.setCurrentUser(this.user!)
         }
