@@ -5,10 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import {TabsModule} from 'ngx-bootstrap/tabs';
 import {NgxGalleryAnimation, NgxGalleryImage, NgxGalleryModule, NgxGalleryOptions} from '@kolkov/ngx-gallery'
+import {TimeagoModule} from 'ngx-timeago'
 
 @Component({
   selector: 'app-member-details',
-  imports: [CommonModule, TabsModule, NgxGalleryModule],
+  imports: [CommonModule, TabsModule, NgxGalleryModule, TimeagoModule],
   templateUrl: './member-details.component.html',
   styleUrl: './member-details.component.css'
 })

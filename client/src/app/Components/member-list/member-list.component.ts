@@ -12,6 +12,7 @@ import { AccountService } from '../../Services/account.service';
 import { take } from 'rxjs';
 import {ButtonsModule} from 'ngx-bootstrap/buttons'
 
+
 @Component({
   selector: 'app-member-list',
   imports: [MemberCardComponent, CommonModule, PaginationModule, FormsModule, ButtonsModule],

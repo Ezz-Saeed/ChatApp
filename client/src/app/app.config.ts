@@ -7,6 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { errorInterceptor } from './Interceptors/error.interceptor';
 import { authenticationInterceptor } from './Interceptors/authentication.interceptor';
 import { loadingInterceptor } from './Interceptors/loading.interceptor';
+import {TimeagoClock, TimeagoDefaultClock, TimeagoDefaultFormatter, TimeagoFormatter, TimeagoIntl, TimeagoModule} from 'ngx-timeago'
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
@@ -15,5 +16,9 @@ export const appConfig: ApplicationConfig = {
     ])),provideAnimations(),provideToastr({
       positionClass:'toast-bottom-right'
     }),
+    TimeagoModule,
+    { provide: TimeagoFormatter, useClass: TimeagoDefaultFormatter },
+    { provide: TimeagoClock, useClass: TimeagoDefaultClock }
+
   ]
 };
