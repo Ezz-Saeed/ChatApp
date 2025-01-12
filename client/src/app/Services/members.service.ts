@@ -3,7 +3,7 @@ import { Environment } from '../Environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { IMember } from '../Models/member';
 import { map, of } from 'rxjs';
-import { IPagination, PaginatedResult } from '../Models/pagination';
+import { PaginatedResult } from '../Models/pagination';
 import { UserParams } from '../Models/userParams';
 
 
@@ -42,8 +42,11 @@ export class MembersService {
 
 
    getMember(userName:string){
-    const member = this.members.find(m=>m.userName === userName);
-    if(member !== undefined) return of(member);
+    const member = [...this.memberCash.values()]
+    .reduce((arr, elem) => arr.concat(elem.result), [])
+    .find((member:IMember) => member.userName === userName);
+
+    if(member) return of(member)
     return this.http.get<IMember>(`${this.baseUrl}/users/${userName}`)
    }
 
