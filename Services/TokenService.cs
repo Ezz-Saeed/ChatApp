@@ -15,7 +15,8 @@ namespace ChatApp.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.NameId, appUser.UserName)
+                new Claim(JwtRegisteredClaimNames.UniqueName, appUser.UserName),
+                new Claim(JwtRegisteredClaimNames.NameId, appUser.Id.ToString()),
             };
 
             var credintials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
