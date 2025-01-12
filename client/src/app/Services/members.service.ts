@@ -14,10 +14,15 @@ import { UserParams } from '../Models/userParams';
 export class MembersService {
   baseUrl = Environment.apiUrl;
   members:IMember[] = [];
+  memberCash = new Map();
 
    constructor(private http:HttpClient){}
 
    getMembers(userParams:UserParams){
+    let response = this.memberCash.get(Object.values(userParams).join('-'));
+    if(response){
+      return of(response)
+    }
     let params = this.getPaginationHeader(userParams.pageNumber, userParams.pageSize);
     if(userParams.gender){
       params = params.append('gender', userParams.gender.toString())
@@ -26,7 +31,12 @@ export class MembersService {
     params = params.append('minAge', userParams.minAge.toString())
     params = params.append('orderBy', userParams.orderBy.toString())
 
-    return this.getPaginatedResult<IMember[]>(`${this.baseUrl}/users`, params)
+    return this.getPaginatedResult<IMember[]>(`${this.baseUrl}/users`, params).pipe(
+      map(response=>{
+        this.memberCash.set(Object.values(userParams).join('-'), response)
+        return response;
+      })
+    )
    }
 
 
