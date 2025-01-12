@@ -24,6 +24,7 @@ export class MembersService {
     }
     params = params.append('maxAge', userParams.maxAge.toString())
     params = params.append('minAge', userParams.minAge.toString())
+    params = params.append('orderBy', userParams.orderBy.toString())
 
     return this.getPaginatedResult<IMember[]>(`${this.baseUrl}/users`, params)
    }
