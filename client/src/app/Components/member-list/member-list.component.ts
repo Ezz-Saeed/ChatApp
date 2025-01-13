@@ -26,7 +26,7 @@ export class MemberListComponent implements OnInit {
   user!:IUser;
   genederList = [{value:'male', display:'Males'}, {value:'female', display:'Females'}]
 
-  constructor(private membersService:MembersService, accountService:AccountService){
+  constructor(private membersService:MembersService,){
     this.userParams = membersService.getUserPArams();
   }
 
