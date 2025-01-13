@@ -60,7 +60,7 @@ namespace ChatApp.Extensions
 
             });
 
-
+            services.AddScoped<ILikeRepository, LikeRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IPhotoService, PhotoService>();
