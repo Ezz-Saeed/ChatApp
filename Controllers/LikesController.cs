@@ -1,5 +1,6 @@
 ﻿using ChatApp.DTOs;
 using ChatApp.Extensions;
+using ChatApp.Helpers;
 using ChatApp.Interfaces;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -35,9 +36,11 @@ namespace ChatApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<LikeDto>>>GetUserLikes(string predicate)
+        public async Task<ActionResult<IEnumerable<LikeDto>>>GetUserLikes([FromQuery]LikesParams likesParams)
         {
-            var likes = await likeRepository.GetUserLikes(predicate, User.GetUserId());
+            likesParams.UserId = User.GetUserId();
+            var likes = await likeRepository.GetUserLikes(likesParams);
+            Response.AddPaginationHeader(likes.CurrentPage, likes.PageSize, likes.TotalCount, likes.TotalPages);
             return Ok(likes);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using ChatApp.DTOs;
+using ChatApp.Helpers;
 using ChatApp.Models;
 
 namespace ChatApp.Interfaces
@@ -7,6 +8,6 @@ namespace ChatApp.Interfaces
     {
         Task<UserLike> GetUserLike(int sourceUserId, int likedUserId);
         Task<AppUser> GetUserWithLikes(int userId);
-        Task<IEnumerable<LikeDto>> GetUserLikes(string predicate, int userId);
+        Task<PagedList<LikeDto>> GetUserLikes(LikesParams likesParams);
     }
 }
