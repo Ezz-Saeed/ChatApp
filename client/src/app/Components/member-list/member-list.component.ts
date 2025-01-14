@@ -8,8 +8,6 @@ import {PaginationModule} from 'ngx-bootstrap/pagination'
 import { FormsModule } from '@angular/forms';
 import { UserParams } from '../../Models/userParams';
 import { IUser } from '../../Models/user';
-import { AccountService } from '../../Services/account.service';
-import { take } from 'rxjs';
 import {ButtonsModule} from 'ngx-bootstrap/buttons'
 
 

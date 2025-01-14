@@ -115,4 +115,12 @@ export class MembersService {
       params = params.append('pageSize', pageSize!.toString())
     return params;
    }
+
+   addLike(userName:string){
+    return this.http.post(`${this.baseUrl}/likes/${userName}`, {});
+   }
+
+   getLikes(predicate:string){
+    return this.http.get<Partial<IMember[]>>(`${this.baseUrl}/likes?predicate=${predicate}`);
+   }
 }
