@@ -43,7 +43,7 @@ namespace ChatApp.Data
 
         public async Task<AppUser> GetUserWithLikes(int userId)
         {
-            return await context.Users.Include(u => u.LikedByUsers)
+            return await context.Users.Include(u => u.LikedUsers)
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
     }
