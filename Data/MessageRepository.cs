@@ -4,6 +4,7 @@ using ChatApp.DTOs;
 using ChatApp.Helpers;
 using ChatApp.Interfaces;
 using ChatApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Data
 {
@@ -39,9 +40,28 @@ namespace ChatApp.Data
             return await PagedList<MessageDto>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
         }
 
-        public Task<IEnumerable<MessageDto>> GetMessageThred(int currentUserId, int recipientId)
+        public async Task<IEnumerable<MessageDto>> GetMessageThred(string currentUserName, string recipientUsername)
         {
-            throw new NotImplementedException();
+            var messages = await context.Messages
+                .Include(m=>m.Recipient).ThenInclude(r=>r.Photos)
+                .Include(m=>m.Sender).ThenInclude(s=>s.Photos)
+                .Where(
+                    m=>m.Recipient.UserName==currentUserName && m.Sender.UserName == recipientUsername || 
+                    m.Recipient.UserName == recipientUsername && m.Sender.UserName == currentUserName
+                ).OrderBy(m=>m.MessageSent).ToListAsync();
+
+            var unreadMessage = messages.Where(m=>m.DateRead == null && m.Recipient.UserName==currentUserName).ToList();
+
+            if(unreadMessage.Any())
+            {
+                foreach(var message in unreadMessage)
+                {
+                    message.DateRead = DateTime.Now;                   
+                }
+                await context.SaveChangesAsync();
+            }
+
+            return mapper.Map<IEnumerable<MessageDto>>(messages);
         }
 
         public async Task<bool> SaveAllAsync()

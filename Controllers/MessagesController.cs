@@ -47,5 +47,12 @@ namespace ChatApp.Controllers
             Response.AddPaginationHeader(messages.CurrentPage, messages.PageSize, messages.TotalCount, messages.TotalPages);
             return messages;
         }
+
+        [HttpGet("thread/{userName}")]
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetMEssageThread(string userName)
+        {
+            var currentUserNAme = User.GetUserName();
+            return Ok(await messageRepository.GetMessageThred(currentUserNAme,userName));
+        }
     }
 }
