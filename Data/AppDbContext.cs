@@ -12,6 +12,7 @@ namespace ChatApp.Data
 
         public virtual DbSet<AppUser> Users { get; set; }
         public virtual DbSet<UserLike> Likes {  get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,6 +31,16 @@ namespace ChatApp.Data
                 .WithMany(u => u.LikedByUsers)
                 .HasForeignKey(u => u.LikedUserId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Sender)
+                .WithMany(s => s.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Message>()
+                .HasOne(m => m.Recipient)
+                .WithMany(r => r.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
