@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ChatApp.DTOs;
 using ChatApp.Extensions;
+using ChatApp.Helpers;
 using ChatApp.Interfaces;
 using ChatApp.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -35,6 +36,16 @@ namespace ChatApp.Controllers
             if (await messageRepository.SaveAllAsync()) return Ok(mapper.Map<MessageDto>(message));
 
             return BadRequest("Couldn't send message!");
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<MessageDto>>>GetMessage([FromQuery]MessageParams messageParams)
+        {
+            messageParams.UserName = User.GetUserName();
+            var messages = await messageRepository.GetMessagesForUser(messageParams);
+
+            Response.AddPaginationHeader(messages.CurrentPage, messages.PageSize, messages.TotalCount, messages.TotalPages);
+            return messages;
         }
     }
 }
