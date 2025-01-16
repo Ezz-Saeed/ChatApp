@@ -3,10 +3,15 @@ import { IMessage } from '../../Models/message';
 import { IPagination } from '../../Models/pagination';
 import { MessageService } from '../../Services/message.service';
 import { CommonModule } from '@angular/common';
+import { ButtonsModule } from 'ngx-bootstrap/buttons';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { TimeagoModule } from 'ngx-timeago';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 
 @Component({
   selector: 'app-messages',
-  imports: [CommonModule],
+  imports: [CommonModule, ButtonsModule, FormsModule, RouterModule, TimeagoModule, PaginationModule],
   templateUrl: './messages.component.html',
   styleUrl: './messages.component.css'
 })
