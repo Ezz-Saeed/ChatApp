@@ -49,12 +49,16 @@
         </ng-container>
 
         <ng-container *ngIf="container !== 'Outbox'">
-          <img style="cursor: pointer;" src="{{message.senderPhotoUrl || 'images/user.png'}}"
+          <img
+          style="cursor: pointer;" src="{{message.senderPhotoUrl || 'images/user.png'}}"
           alt="{{message.senderUserName}}"
           class="img-circle rounded-circle "
-          routerLink='{{container === "Outbox" ?
-          "/members/" + message.recipientUserName :
-          "/members/" + message.senderUserName}}'>
+
+          [routerLink]="container === 'Outbox'
+          ? '/members/' + message.recipientUserName
+          : ( container === 'Inbox' ? '/members/' + message.senderUserName :
+          '/members/' + message.recipientUserName)"
+           [queryParams]='{tab: 3}'>
           <strong>{{message.senderUserName | titlecase}}</strong>
         </ng-container>
       </td>
