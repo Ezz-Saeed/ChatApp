@@ -16,7 +16,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
   styleUrl: './messages.component.css'
 })
 export class MessagesComponent implements OnInit {
-  messages?:IMessage[]
+  messages?:IMessage[] = []
   pagination?:IPagination
   pageNumber = 1
   pageSize=5
