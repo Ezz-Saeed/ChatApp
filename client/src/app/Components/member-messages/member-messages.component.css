@@ -1,0 +1,56 @@
+
+.card{
+  border: none;
+}
+
+.chat{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.chat li{
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  /* border-bottom: 1px dotted #B3A9A9; */
+}
+
+.rounded-circle{
+  max-height: 50px;
+}
+
+.text-right{
+  text-align: right;
+}
+
+.text-left{
+  text-align: left;
+}
+
+ .chat-body {
+  display: inline-block;
+  /* background-color: rgb(240, 99, 47); */
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 60%;
+}
+
+.text-right .chat-body{
+  background-color: rgb(240, 99, 47);
+  color: whitesmoke;
+}
+
+.text-left .chat-body{
+  background-color: rgb(246, 137, 94);
+  color: white;
+}
+
+/* .chat-img.float-right {
+  float: none;
+  margin-left: 10px;
+}
+
+.chat-img img {
+  width: 40px;
+  height: 40px;
+} */

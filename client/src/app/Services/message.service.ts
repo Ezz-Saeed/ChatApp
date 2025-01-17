@@ -17,4 +17,8 @@ export class MessageService {
     params = params.append('Container',container);
     return getPaginatedResult<IMessage[]>(`${this.baseUrl}/Messages`,params,this.http)
   }
+
+  getMessageThred(userName:string){
+    return this.http.get<IMessage[]>(`${this.baseUrl}/Messages/thread/${userName}`)
+  }
 }

@@ -11,7 +11,7 @@
 
     <button class="btn btn-primary" btnRadio="Outbox" name="container"
     [(ngModel)]="container" (click)="loadMessages()">
-    <i class="fa fa-envelope-plane"></i> Outbox</button>
+    <i class="fa fa-paper-plane"></i> Outbox</button>
   </div>
 </div>
 
@@ -20,7 +20,7 @@
 </div>
 
 <div class="row" *ngIf="messages!.length > 0">
-  <table class="table table-hover" style="cursor: pointer;">
+  <table class="table table-hover" >
     <tr>
       <th style="width: 40%;">Message</th>
       <th style="width: 20%;">From / To</th>
@@ -28,25 +28,35 @@
       <th style="width: 20%;"></th>
     </tr>
 
-    <tr *ngFor="let message of messages"
-    routerLink='{{container === "Outbox" ?
-    "/members/" + message.recipientUserName :
-    "/members/" + message.senderUserName}}'>
+    <tr *ngFor="let message of messages">
       <td>{{message.content}}</td>
       <td>
-        <div *ngIf="container === 'Outbox'" >
+        <!-- <div *ngIf="container === 'Outbox'" >
           <img src="{{message.recipientPhotoUrl || 'images/user.png'}}"
           alt="{{message.recipientUserName}}"
           class="img-circle rounded-circle ">
           <strong>{{message.recipientUserName | titlecase}}</strong>
-        </div>
+        </div> -->
 
-        <div *ngIf="container !== 'Outbox'">
-          <img src="{{message.senderPhotoUrl || 'images/user.png'}}"
+        <ng-container *ngIf="container === 'Outbox'">
+          <img style="cursor: pointer;" src="{{message.recipientPhotoUrl || 'images/user.png'}}"
+          alt="{{message.recipientUserName}}"
+          class="img-circle rounded-circle "
+          routerLink='{{container === "Outbox" ?
+          "/members/" + message.recipientUserName :
+          "/members/" + message.senderUserName}}'>
+          <strong>{{message.recipientUserName | titlecase}}</strong>
+        </ng-container>
+
+        <ng-container *ngIf="container !== 'Outbox'">
+          <img style="cursor: pointer;" src="{{message.senderPhotoUrl || 'images/user.png'}}"
           alt="{{message.senderUserName}}"
-          class="img-circle rounded-circle ">
+          class="img-circle rounded-circle "
+          routerLink='{{container === "Outbox" ?
+          "/members/" + message.recipientUserName :
+          "/members/" + message.senderUserName}}'>
           <strong>{{message.senderUserName | titlecase}}</strong>
-        </div>
+        </ng-container>
       </td>
 
       <td>{{message.messageSent | timeago}}</td>
@@ -58,7 +68,7 @@
   </table>
 </div>
 
-<div class="d-flex justify-content-center" *ngIf="pagination">
+<div class="d-flex justify-content-center" *ngIf="pagination && messages!.length > 0">
   <pagination
   [boundaryLinks]="true"
   [totalItems]="pagination.itemsCount"
