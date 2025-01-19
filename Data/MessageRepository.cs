@@ -22,7 +22,7 @@ namespace ChatApp.Data
 
         public async Task<Message> GetMessage(int id)
         {
-            return await context.Messages.FindAsync(id);
+            return await context.Messages.Include(m=>m.Sender).Include(m=>m.Recipient).FirstOrDefaultAsync(m=>m.Id == id);
         }
 
         public async Task<PagedList<MessageDto>> GetMessagesForUser(MessageParams messageParams)
@@ -31,9 +31,9 @@ namespace ChatApp.Data
 
             query = messageParams.Container switch
             {
-                "Inbox" => query.Where(m=>m.Recipient.UserName == messageParams.UserName),
-                "Outbox" => query.Where(m=>m.Sender.UserName == messageParams.UserName),
-                _ => query.Where(m => m.Recipient.UserName == messageParams.UserName && m.DateRead == null)
+                "Inbox" => query.Where(m=>m.Recipient.UserName == messageParams.UserName && m.RecipientDeleted==false),
+                "Outbox" => query.Where(m=>m.Sender.UserName == messageParams.UserName && m.SenderDeleted==false),
+                _ => query.Where(m => m.Recipient.UserName == messageParams.UserName && m.DateRead == null && m.RecipientDeleted == false)
             };
 
             var messages = query.ProjectTo<MessageDto>(mapper.ConfigurationProvider);
@@ -46,8 +46,10 @@ namespace ChatApp.Data
                 .Include(m=>m.Recipient).ThenInclude(r=>r.Photos)
                 .Include(m=>m.Sender).ThenInclude(s=>s.Photos)
                 .Where(
-                    m=>m.Recipient.UserName==currentUserName && m.Sender.UserName == recipientUsername || 
-                    m.Recipient.UserName == recipientUsername && m.Sender.UserName == currentUserName
+                    m=>m.Recipient.UserName==currentUserName && 
+                    m.Sender.UserName == recipientUsername && m.RecipientDeleted==false || 
+                    m.Recipient.UserName == recipientUsername && 
+                    m.Sender.UserName == currentUserName && m.SenderDeleted==false
                 ).OrderBy(m=>m.MessageSent).ToListAsync();
 
             var unreadMessage = messages.Where(m=>m.DateRead == null && m.Recipient.UserName==currentUserName).ToList();

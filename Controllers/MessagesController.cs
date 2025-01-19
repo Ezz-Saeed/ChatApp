@@ -54,5 +54,30 @@ namespace ChatApp.Controllers
             var currentUserNAme = User.GetUserName();
             return Ok(await messageRepository.GetMessageThred(currentUserNAme,userName));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteMessage(int id)
+        {
+            var userName = User.GetUserName();
+            var message = await messageRepository.GetMessage(id);
+
+            if (message == null) return BadRequest();
+
+            if(message.Sender.UserName != userName && message.Recipient.UserName != userName)
+                return Unauthorized();
+
+            if(message.Sender.UserName == userName)
+                message.SenderDeleted = true;
+
+            if (message.Recipient.UserName == userName)
+                message.RecipientDeleted = true;
+
+            if(message.SenderDeleted && message.RecipientDeleted)
+                messageRepository.DeleteMessage(message);
+
+            if (await messageRepository.SaveAllAsync()) return Ok();
+
+            return BadRequest("Couldn't delete the message!");
+        }
     }
 }

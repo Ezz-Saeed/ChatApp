@@ -28,7 +28,7 @@
       <th style="width: 20%;"></th>
     </tr>
 
-    <tr *ngFor="let message of messages">
+    <tr [hidden]="loading" *ngFor="let message of messages">
       <td>{{message.content}}</td>
       <td>
         <!-- <div *ngIf="container === 'Outbox'" >
@@ -66,13 +66,13 @@
       <td>{{message.messageSent | timeago}}</td>
 
       <td>
-        <button class="btn btn-danger">Delete</button>
+        <button (click)="deleteMessage(message.id)" class="btn btn-danger">Delete</button>
       </td>
     </tr>
   </table>
 </div>
 
-<div class="d-flex justify-content-center" *ngIf="pagination && messages!.length > 0">
+<div class="d-flex justify-content-center" *ngIf="pagination && messages!.length > 0 && !loading">
   <pagination
   [boundaryLinks]="true"
   [totalItems]="pagination.itemsCount"
