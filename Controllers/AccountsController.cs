@@ -5,6 +5,7 @@ using ChatApp.Interfaces;
 using ChatApp.Models;
 using ChatApp.Services;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
@@ -12,7 +13,7 @@ using System.Text;
 
 namespace ChatApp.Controllers
 {
-    public class AccountsController(AppDbContext context, ITokenService tokenService, IMapper mapper) : BasApiController
+    public class AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService, IMapper mapper) : BasApiController
     {
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
@@ -22,8 +23,9 @@ namespace ChatApp.Controllers
             
             user.UserName = registerDto.UserName.ToLower();
 
-            context.Users.Add(user);
-            await context.SaveChangesAsync();
+            var result = await userManager.CreateAsync(user, registerDto.Password);
+            if (!result.Succeeded) return BadRequest();
+
             return new UserDto
             {
                 UserName = user.UserName,
@@ -36,9 +38,12 @@ namespace ChatApp.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
-            var user = await context.Users.Include(u=>u.Photos).SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
+            var user = await userManager.Users.Include(u=>u.Photos).SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
 
             if (user is null) return Unauthorized("Unauthorized user!");
+
+            var result = await signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            if (!result.Succeeded) return Unauthorized("Unauthorized user!");
 
             return new UserDto
             {
@@ -52,7 +57,7 @@ namespace ChatApp.Controllers
 
         private async Task<bool> CheckUserExists(string userName)
         {
-            return await context.Users.AnyAsync(u=>u.UserName == userName.ToLower());
+            return await userManager.Users.AnyAsync(u=>u.UserName == userName.ToLower());
         }
     }
 }
