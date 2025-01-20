@@ -1,4 +1,5 @@
 ﻿using ChatApp.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -8,9 +9,9 @@ namespace ChatApp.Data.Seed
 {
     public class AppUserSeed
     {
-        public static async Task SeedUsersAsync(AppDbContext context)
+        public static async Task SeedUsersAsync(UserManager<AppUser> userManager)
         {
-            if (await context.Users.AnyAsync()) return;
+            if (await userManager.Users.AnyAsync()) return;
 
             var userData = File.ReadAllText("Data/Seed/UserSeedData.json");
             
@@ -18,14 +19,10 @@ namespace ChatApp.Data.Seed
 
             foreach(var user in users)
             {
-                var hmac = new HMACSHA512();
                 user.UserName = user.UserName.ToLower();
-                user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes("Ab$$123"));
-                user.PasswordSalt = hmac.Key;
 
-                context.Users.Add(user);
+                await userManager.CreateAsync(user, "Ab$$123");
             }
-            await context.SaveChangesAsync();
         }
     }
 }

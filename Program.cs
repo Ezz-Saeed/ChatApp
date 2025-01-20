@@ -4,8 +4,10 @@ using ChatApp.Data.Seed;
 using ChatApp.Extensions;
 using ChatApp.Interfaces;
 using ChatApp.Middlwares;
+using ChatApp.Models;
 using ChatApp.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -55,8 +57,9 @@ namespace ChatApp
             try
             {
                 var context = services.GetRequiredService<AppDbContext>();
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
                 await context.Database.MigrateAsync();
-                await AppUserSeed.SeedUsersAsync(context);
+                await AppUserSeed.SeedUsersAsync(userManager);
             }
             catch (Exception ex)
             {

@@ -21,7 +21,7 @@ export class MessagesComponent implements OnInit {
   pagination?:IPagination
   pageNumber = 1
   pageSize=5
-  container = 'Unread'
+  container = 'Inbox'
   loading = false;
   constructor(private messageService:MessageService, private router:Router){}
 
@@ -48,16 +48,16 @@ export class MessagesComponent implements OnInit {
     }
   }
 
-  getRouterLink(message:IMessage, tab:number){
-    let params = new HttpParams();
-      params = params.append('tab',3);
-    if(this.container === 'Outbox'){
+  // getRouterLink(message:IMessage, tab:number){
+  //   let params = new HttpParams();
+  //     params = params.append('tab',3);
+  //   if(this.container === 'Outbox'){
 
-      this.router.navigate([`/members/${message.recipientUserName}`,params])
-      // return `/members/${message.recipientUserName}?tab=${tab.toString()}`
-    }
-    this.router.navigate([`/members/${message.senderUserName}`,params])
-  }
+  //     this.router.navigate([`/members/${message.recipientUserName}`,params])
+  //     return `/members/${message.recipientUserName}?tab=${tab.toString()}`
+  //   }
+  //   this.router.navigate([`/members/${message.senderUserName}`,params])
+  // }
 
   deleteMessage(id:number){
     this.messageService.deleteMessage(id).subscribe({

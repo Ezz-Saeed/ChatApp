@@ -68,15 +68,15 @@ export class MemberDetailsComponent implements OnInit{
     return imageUrls;
   }
 
-  loadMember(){
-    this.memberService.getMember(this.userName).subscribe({
-      next:res=>{
-        this.member = res;
-        this.galleryImages = this.getImages();
-      },
-      error:err=>console.log(err)
-    })
-  }
+  // loadMember(){
+  //   this.memberService.getMember(this.userName).subscribe({
+  //     next:res=>{
+  //       this.member = res;
+  //       this.galleryImages = this.getImages();
+  //     },
+  //     error:err=>console.log(err)
+  //   })
+  // }
 
   loadMessageThread(){
       this.messageService.getMessageThred(this.member.userName).subscribe({

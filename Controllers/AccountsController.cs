@@ -19,11 +19,8 @@ namespace ChatApp.Controllers
         {
             if (await CheckUserExists(registerDto.UserName)) return BadRequest("Username is already taken");
             var user = mapper.Map<AppUser>(registerDto);
-            using var hmac = new HMACSHA512();
             
             user.UserName = registerDto.UserName.ToLower();
-            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
-            user.PasswordSalt = hmac.Key;
 
             context.Users.Add(user);
             await context.SaveChangesAsync();
@@ -42,14 +39,6 @@ namespace ChatApp.Controllers
             var user = await context.Users.Include(u=>u.Photos).SingleOrDefaultAsync(u=>u.UserName==loginDto.UserName);
 
             if (user is null) return Unauthorized("Unauthorized user!");
-            using var hmac = new HMACSHA512(user.PasswordSalt);
-            var passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginDto.Password));
-
-            for(int i = 0; i < passwordHash.Length; i++)
-            {
-                if (passwordHash[i] != user.PasswordHash[i])
-                    return Unauthorized("Unauthorized user!");
-            }
 
             return new UserDto
             {

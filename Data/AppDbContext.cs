@@ -1,22 +1,37 @@
 ﻿using ChatApp.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser, AppRole,int, IdentityUserClaim<int>,
+        AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int> ,IdentityUserToken<int>>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
             
         }
 
-        public virtual DbSet<AppUser> Users { get; set; }
         public virtual DbSet<UserLike> Likes {  get; set; }
         public virtual DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppUser>()
+                .HasMany(u => u.UserRoles)
+                .WithOne(ur => ur.User)
+                .HasForeignKey(u => u.UserId)
+                .IsRequired();
+
+            modelBuilder.Entity<AppRole>()
+                .HasMany(r=>r.UserRoles)
+                .WithOne(ur=>ur.Role)
+                .HasForeignKey(r=>r.RoleId)
+                .IsRequired();
+
             modelBuilder.Entity<UserLike>()
                 .HasKey(ul => new { ul.SourceUserId, ul.LikedUserId });
 

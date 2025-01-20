@@ -31,20 +31,13 @@
     <tr [hidden]="loading" *ngFor="let message of messages">
       <td>{{message.content}}</td>
       <td>
-        <!-- <div *ngIf="container === 'Outbox'" >
-          <img src="{{message.recipientPhotoUrl || 'images/user.png'}}"
-          alt="{{message.recipientUserName}}"
-          class="img-circle rounded-circle ">
-          <strong>{{message.recipientUserName | titlecase}}</strong>
-        </div> -->
-
         <ng-container *ngIf="container === 'Outbox'">
           <img style="cursor: pointer;" src="{{message.recipientPhotoUrl || 'images/user.png'}}"
           alt="{{message.recipientUserName}}"
           class="img-circle rounded-circle "
           routerLink='{{container === "Outbox" ?
           "/members/" + message.recipientUserName :
-          "/members/" + message.senderUserName}}'>
+          "/members/" + message.senderUserName}}' [queryParams]="{tab:3}">
           <strong>{{message.recipientUserName | titlecase}}</strong>
         </ng-container>
 
@@ -54,10 +47,10 @@
           alt="{{message.senderUserName}}"
           class="img-circle rounded-circle "
 
-          [routerLink]="container === 'Outbox'
-          ? '/members/' + message.recipientUserName
-          : ( container === 'Inbox' ? '/members/' + message.senderUserName :
-          '/members/' + message.recipientUserName)"
+          [routerLink]="container === 'Inbox'
+          ? '/members/' + message.senderUserName
+          : ( container === 'Outbox' ? '/members/' + message.recipientUserName + '?tab=3' :
+          '/members/' + message.senderUserName)"
            [queryParams]='{tab: 3}'>
           <strong>{{message.senderUserName | titlecase}}</strong>
         </ng-container>
