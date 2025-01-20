@@ -58,8 +58,9 @@ namespace ChatApp
             {
                 var context = services.GetRequiredService<AppDbContext>();
                 var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                var rolManager = services.GetRequiredService<RoleManager<AppRole>>();
                 await context.Database.MigrateAsync();
-                await AppUserSeed.SeedUsersAsync(userManager);
+                await AppUserSeed.SeedUsersAsync(userManager, rolManager);
             }
             catch (Exception ex)
             {

@@ -17,7 +17,6 @@ namespace ChatApp.Controllers
     public class UsersController(IUserRepository repository, IMapper mapper, IPhotoService photoService) : BasApiController
     {
 
-
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
