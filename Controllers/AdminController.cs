@@ -1,15 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using ChatApp.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ChatApp.Controllers
 {
-    public class AdminController : BasApiController
+    public class AdminController(UserManager<AppUser> userManager) : BasApiController
     {
         [Authorize(Policy = "RequiredAdminRole")]
         [HttpGet("usersWithRoles")]
-        public ActionResult GetUsersWithRoles()
+        public async Task<ActionResult> GetUsersWithRoles()
         {
-            return Ok("Only admin can see this");
+            var users = await userManager.Users
+                .Include(u => u.UserRoles)
+                .ThenInclude(r => r.Role)
+                .OrderBy(u => u.UserName)
+                .Select(u => new
+                {
+                    u.Id,
+                    UserName = u.UserName,
+                    Roles = u.UserRoles.Select(ur => ur.Role.Name),
+                }).ToListAsync();
+            return Ok(users);
         }
 
         [Authorize(Policy = "ModeratePhotoRole")]
