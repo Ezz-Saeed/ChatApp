@@ -25,6 +25,23 @@ namespace ChatApp.Controllers
             return Ok(users);
         }
 
+        [HttpPost("editRoles/{userName}")]
+        public async Task<ActionResult> EditRoles(string userName, [FromQuery] string roles)
+        {
+            var selectedRoles = roles.Split(',');
+
+            var user = await userManager.FindByNameAsync(userName);
+            var userRoles = await userManager.GetRolesAsync(user);
+
+            var result = await userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles));
+            if (!result.Succeeded) return BadRequest("Couldn't add user to roles");
+
+            result = await userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles));
+            if (!result.Succeeded) return BadRequest("Couldn't remove user from roles");
+
+            return Ok(await userManager.GetRolesAsync(user));
+        }
+
         [Authorize(Policy = "ModeratePhotoRole")]
         [HttpGet("photosToModerate")]
         public ActionResult GetPhotosForModeration()
